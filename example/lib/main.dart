@@ -35,7 +35,7 @@ class Body extends StatefulWidget {
 class _MyBodyState extends State<Body> {
   final String userName = Random().nextInt(10000).toString();
   final Strategy strategy = Strategy.P2P_CLUSTER;
-
+  final myController = TextEditingController();
   List<String> cId = []; //currently connected device ID
   File tempFile; //reference to the file currently being transferred
   Map<int, String> map =
@@ -95,6 +95,7 @@ class _MyBodyState extends State<Body> {
                     await Nearby().askExternalStoragePermission();
                   },
                 ),
+                TextField(controller: myController,),
               ],
             ),
             Divider(),
@@ -206,7 +207,7 @@ class _MyBodyState extends State<Body> {
             RaisedButton(
               child: Text("Send Random Bytes Payload"),
               onPressed: () async {
-                String a = Random().nextInt(100).toString();
+                String a = myController.text;
                 for (var i in cId) {
                   showSnackbar("Sending $a to $i");
                   Nearby().sendBytesPayload(i, Uint8List.fromList(a.codeUnits));
