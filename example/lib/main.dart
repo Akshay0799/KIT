@@ -259,7 +259,10 @@ class _MyBodyState extends State<Body> {
                 child: Text("Accept Connection"),
                 onPressed: () {
                   Navigator.pop(context);
-                  cId.add(id);
+                  if(!cId.contains(id)){
+                    cId.add(id);
+                  }
+                    
                   Nearby().acceptConnection(
                     id,
                     onPayLoadRecieved: (endid, payload) async {
