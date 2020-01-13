@@ -7,9 +7,9 @@ Emergencies and disasters impact population's health. Public health plays a crit
 **Probelm Statement Number: SS42**
 
 **Members**<br>
-Akshay S - Leader
-Mridul Krishnan
-Muthukumaran
-Manikantan A
-Subramanian R
+Akshay S(Leader), 
+Mridul Krishnan, 
+Muthukumaran, 
+Manikantan A, 
+Subramanian R, 
 Shilpitha Prasad V
