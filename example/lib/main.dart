@@ -36,7 +36,7 @@ class _MyBodyState extends State<Body> {
   final String userName = Random().nextInt(10000).toString();
   final Strategy strategy = Strategy.P2P_CLUSTER;
 
-  String cId = "0"; //currently connected device ID
+  List<String> cId = []; //currently connected device ID
   File tempFile; //reference to the file currently being transferred
   Map<int, String> map =
       Map(); //store filename mapped to corresponding payloadId
@@ -207,8 +207,10 @@ class _MyBodyState extends State<Body> {
               child: Text("Send Random Bytes Payload"),
               onPressed: () async {
                 String a = Random().nextInt(100).toString();
-                showSnackbar("Sending $a to $cId");
-                Nearby().sendBytesPayload(cId, Uint8List.fromList(a.codeUnits));
+                for (var i in cId) {
+                  showSnackbar("Sending $a to $i");
+                  Nearby().sendBytesPayload(i, Uint8List.fromList(a.codeUnits));
+                }
               },
             ),
             RaisedButton(
@@ -218,13 +220,14 @@ class _MyBodyState extends State<Body> {
                     await ImagePicker.pickImage(source: ImageSource.gallery);
 
                 if (file == null) return;
-
-                int payloadId = await Nearby().sendFilePayload(cId, file.path);
-                showSnackbar("Sending file to $cId");
-                Nearby().sendBytesPayload(
-                    cId,
-                    Uint8List.fromList(
-                        "$payloadId:${file.path.split('/').last}".codeUnits));
+                for (var z in cId) {
+                  int payloadId = await Nearby().sendFilePayload(z, file.path);
+                  showSnackbar("Sending file to $z");
+                  Nearby().sendBytesPayload(
+                      z,
+                      Uint8List.fromList(
+                          "$payloadId:${file.path.split('/').last}".codeUnits));
+                }
               },
             ),
           ],
@@ -256,7 +259,7 @@ class _MyBodyState extends State<Body> {
                 child: Text("Accept Connection"),
                 onPressed: () {
                   Navigator.pop(context);
-                  cId = id;
+                  cId.add(id);
                   Nearby().acceptConnection(
                     id,
                     onPayLoadRecieved: (endid, payload) async {
