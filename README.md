@@ -1,16 +1,15 @@
-# flutter_pro
+**Team Name : import team_name
+Team Number : 8 **
 
-A new Flutter project.
+**Problem statement**
+Emergencies and disasters impact population's health. Public health plays a critical role in working with health and non-health sectors responsible for preparing for and responding to emergencies. In emergencies, large numbers of people may require medical attention. Health care systems may be over-stretched, and public order may be threatened. Hence, we want software solution such that social media can be used in public health emergency response. Such tool/page/plugin should have the below capabilities. (1) Alarm message during emergencies (2) Providing precautinary steps to be taken during emergency/disasters (3) Help in finding nearby available healthcare systems (4) Providing First aid/primary steps to be taken/provided to patients, in case of emergencies/disasters.
 
-## Getting Started
+**Probelm Statement Number: SS42**
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+**Members**
+Akshay S - Leader
+Mridul Krishnan
+Muthukumaran
+Manikantan A
+Subramanian R
+Shilpitha Prasad V
