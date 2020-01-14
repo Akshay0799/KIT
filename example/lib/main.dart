@@ -3,8 +3,10 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import './maps.dart';
 import 'package:nearby_connections/nearby_connections.dart';
-import 'package:image_picker/image_picker.dart';
+//import 'package:image_picker/image_picker.dart';
+//import 'package:location/location.dart';
 
 void main() => runApp(MyApp());
 
@@ -46,6 +48,7 @@ class _MyBodyState extends State<Body> {
 
   @override
   void initState() {
+    super.initState();
     checkloc();
   }
 
@@ -88,6 +91,8 @@ class _MyBodyState extends State<Body> {
             Wrap(
               children: <Widget>[
                 RaisedButton(
+                  color: Theme.of(context).primaryColorDark,
+                  textColor: Theme.of(context).primaryColorLight,
                   child: Text("Start Advertising"),
                   onPressed: () async {
                     try {
@@ -108,7 +113,10 @@ class _MyBodyState extends State<Body> {
                     }
                   },
                 ),
+                Container(width: 5.0 * 5),
                 RaisedButton(
+                  color: Theme.of(context).primaryColorDark,
+                  textColor: Theme.of(context).primaryColorLight,
                   child: Text("Stop Advertising"),
                   onPressed: () async {
                     await Nearby().stopAdvertising();
@@ -119,7 +127,9 @@ class _MyBodyState extends State<Body> {
             Wrap(
               children: <Widget>[
                 RaisedButton(
-                  child: Text("Start Discovery"),
+                  color: Theme.of(context).primaryColorDark,
+                  textColor: Theme.of(context).primaryColorLight,
+                  child: Text("Start Discovery   "),
                   onPressed: () async {
                     try {
                       bool a = await Nearby().startDiscovery(
@@ -171,8 +181,11 @@ class _MyBodyState extends State<Body> {
                     }
                   },
                 ),
+                Container(width: 5.0 * 5),
                 RaisedButton(
-                  child: Text("Stop Discovery"),
+                  color: Theme.of(context).primaryColorDark,
+                  textColor: Theme.of(context).primaryColorLight,
+                  child: Text("Stop Discovery   "),
                   onPressed: () async {
                     await Nearby().stopDiscovery();
                   },
@@ -180,6 +193,8 @@ class _MyBodyState extends State<Body> {
               ],
             ),
             RaisedButton(
+              color: Theme.of(context).primaryColorDark,
+              textColor: Theme.of(context).primaryColorLight,
               child: Text("Stop All Endpoints"),
               onPressed: () async {
                 await Nearby().stopAllEndpoints();
@@ -190,6 +205,8 @@ class _MyBodyState extends State<Body> {
               "Sending Data",
             ),
             RaisedButton(
+                color: Theme.of(context).primaryColorDark,
+                textColor: Theme.of(context).primaryColorLight,
                 child: Text("Send Message"),
                 onPressed: () async {
                   String a = myController.text;
@@ -222,7 +239,10 @@ class _MyBodyState extends State<Body> {
             //     }
             //   },
             // ),
-            Text('Received Messages\n', style: TextStyle(fontSize: 20)),
+            Text(
+              'Received Messages\n',
+              style: TextStyle(fontSize: 20),
+            ),
             Column(
                 children: msg
                     .map((f) => Row(children: <Widget>[
@@ -232,7 +252,12 @@ class _MyBodyState extends State<Body> {
                           RaisedButton(
                             color: Theme.of(context).primaryColorDark,
                             textColor: Theme.of(context).primaryColorLight,
-                            onPressed: Go,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => maps()),
+                              );
+                            },
                             child: Text('View', style: TextStyle(fontSize: 20)),
                           )
                         ]))
