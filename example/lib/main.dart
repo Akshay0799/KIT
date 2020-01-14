@@ -19,7 +19,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Nearby Connections example app'),
+          title: const Text('Keep In Touch'),
         ),
         body: Body(),
       ),
@@ -33,69 +33,54 @@ class Body extends StatefulWidget {
 }
 
 class _MyBodyState extends State<Body> {
+  List<String> msg = [];
   final String userName = Random().nextInt(10000).toString();
   final Strategy strategy = Strategy.P2P_CLUSTER;
   final myController = TextEditingController();
+  final options = ['SOS', 'Health Centre', 'Resource Centre'];
+  String _option = 'SOS';
   List<String> cId = []; //currently connected device ID
   File tempFile; //reference to the file currently being transferred
   Map<int, String> map =
       Map(); //store filename mapped to corresponding payloadId
 
   @override
-  void initState() {}
+  void initState() {
+    checkloc();
+  }
 
   @override
   Widget build(BuildContext context) {
+    TextStyle textStyle = Theme.of(context).textTheme.title;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: <Widget>[
-            Text(
-              "Permissions",
-            ),
             Wrap(
               children: <Widget>[
-                RaisedButton(
-                  child: Text("checkLocationPermission"),
-                  onPressed: () async {
-                    if (await Nearby().checkLocationPermission()) {
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                          content: Text("Location permissions granted :)")));
-                    } else {
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                          content:
-                              Text("Location permissions not granted :(")));
-                    }
+                DropdownButton(
+                  items: options.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  value: _option,
+                  onChanged: (String value) {
+                    setState(() {
+                      this._option = value;
+                    });
                   },
                 ),
-                RaisedButton(
-                  child: Text("askLocationPermission"),
-                  onPressed: () async {
-                    await Nearby().askLocationPermission();
-                  },
-                ),
-                RaisedButton(
-                  child: Text("checkExternalStoragePermission"),
-                  onPressed: () async {
-                    if (await Nearby().checkExternalStoragePermission()) {
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                          content:
-                              Text("External Storage permissions granted :)")));
-                    } else {
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                          content: Text(
-                              "External Storage permissions not granted :(")));
-                    }
-                  },
-                ),
-                RaisedButton(
-                  child: Text("askExternalStoragePermission"),
-                  onPressed: () async {
-                    await Nearby().askExternalStoragePermission();
-                  },
-                ),
-                TextField(controller: myController,),
+                TextField(
+                    controller: myController,
+                    decoration: InputDecoration(
+                        hintText: 'e.g. abcd',
+                        labelText: 'Message',
+                        labelStyle: textStyle,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0)))),
               ],
             ),
             Divider(),
@@ -205,36 +190,85 @@ class _MyBodyState extends State<Body> {
               "Sending Data",
             ),
             RaisedButton(
-              child: Text("Send Random Bytes Payload"),
-              onPressed: () async {
-                String a = myController.text;
-                for (var i in cId) {
-                  showSnackbar("Sending $a to $i");
-                  Nearby().sendBytesPayload(i, Uint8List.fromList(a.codeUnits));
-                }
-              },
-            ),
-            RaisedButton(
-              child: Text("Send File Payload"),
-              onPressed: () async {
-                File file =
-                    await ImagePicker.pickImage(source: ImageSource.gallery);
+                child: Text("Send Message"),
+                onPressed: () async {
+                  String a = myController.text;
+                  if (_option == 'SOS')
+                    a = 'SOS: ' + a;
+                  else if (_option == 'Health Centre')
+                    a = 'HC: ' + a;
+                  else
+                    a = 'RC: ' + a;
+                  for (var i in cId) {
+                    showSnackbar("Sending $a to $i");
+                    Nearby()
+                        .sendBytesPayload(i, Uint8List.fromList(a.codeUnits));
+                  }
+                }),
+            // RaisedButton(
+            //   child: Text("Send File Payload"),
+            //   onPressed: () async {
+            //     File file =
+            //         await ImagePicker.pickImage(source: ImageSource.gallery);
 
-                if (file == null) return;
-                for (var z in cId) {
-                  int payloadId = await Nearby().sendFilePayload(z, file.path);
-                  showSnackbar("Sending file to $z");
-                  Nearby().sendBytesPayload(
-                      z,
-                      Uint8List.fromList(
-                          "$payloadId:${file.path.split('/').last}".codeUnits));
-                }
-              },
-            ),
+            //     if (file == null) return;
+            //     for (var z in cId) {
+            //       int payloadId = await Nearby().sendFilePayload(z, file.path);
+            //       showSnackbar("Sending file to $z");
+            //       Nearby().sendBytesPayload(
+            //           z,
+            //           Uint8List.fromList(
+            //               "$payloadId:${file.path.split('/').last}".codeUnits));
+            //     }
+            //   },
+            // ),
+            Text('Received Messages\n', style: TextStyle(fontSize: 20)),
+            Column(
+                children: msg
+                    .map((f) => Row(children: <Widget>[
+                          Text(f,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontSize: 20)),
+                          RaisedButton(
+                            color: Theme.of(context).primaryColorDark,
+                            textColor: Theme.of(context).primaryColorLight,
+                            onPressed: Go,
+                            child: Text('View', style: TextStyle(fontSize: 20)),
+                          )
+                        ]))
+                    .toList()),
           ],
         ),
       ),
     );
+  }
+
+  void Go() {}
+  void askLoc() async {
+    await Nearby().askLocationPermission();
+  }
+
+  void checkloc() async {
+    if (await Nearby().checkLocationPermission()) {
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text("Location permissions granted :)")));
+    } else {
+      askLoc();
+    }
+    checkext();
+  }
+
+  void askExt() async {
+    await Nearby().askExternalStoragePermission();
+  }
+
+  void checkext() async {
+    if (await Nearby().checkExternalStoragePermission()) {
+      Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text("External Storage permissions granted :)")));
+    } else {
+      askExt();
+    }
   }
 
   void showSnackbar(dynamic a) {
@@ -260,16 +294,26 @@ class _MyBodyState extends State<Body> {
                 child: Text("Accept Connection"),
                 onPressed: () {
                   Navigator.pop(context);
-                  if(!cId.contains(id)){
+                  if (!cId.contains(id)) {
                     cId.add(id);
                   }
-                    
+
                   Nearby().acceptConnection(
                     id,
                     onPayLoadRecieved: (endid, payload) async {
                       if (payload.type == PayloadType.BYTES) {
                         String str = String.fromCharCodes(payload.bytes);
                         showSnackbar(endid + ": " + str);
+                        setState(() {
+                          if (!msg.contains(str)) {
+                            msg.add(str);
+                            for (var i in cId) {
+                              showSnackbar("Sending $str to $i");
+                              Nearby().sendBytesPayload(
+                                  i, Uint8List.fromList(str.codeUnits));
+                            }
+                          }
+                        });
 
                         if (str.contains(':')) {
                           // used for file payload as file payload is mapped as
