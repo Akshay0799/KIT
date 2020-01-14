@@ -39,7 +39,7 @@ class _MyBodyState extends State<Body> {
   final String userName = Random().nextInt(10000).toString();
   final Strategy strategy = Strategy.P2P_CLUSTER;
   final myController = TextEditingController();
-  final options = ['SOS', 'Health Centre', 'Resource Centre'];
+  final options = ['SOS', 'Health Centre', 'Resource Centre', 'Reply'];
   String _option = 'SOS';
   List<String> cId = []; //currently connected device ID
   File tempFile; //reference to the file currently being transferred
@@ -214,8 +214,10 @@ class _MyBodyState extends State<Body> {
                     a = 'SOS: ' + a;
                   else if (_option == 'Health Centre')
                     a = 'HC: ' + a;
-                  else
+                  else if (_option == 'Resource Centre')
                     a = 'RC: ' + a;
+                  else
+                    a = 'Reply: ' + a;
                   for (var i in cId) {
                     showSnackbar("Sending $a to $i");
                     Nearby()
@@ -249,17 +251,6 @@ class _MyBodyState extends State<Body> {
                           Text(f,
                               textAlign: TextAlign.left,
                               style: TextStyle(fontSize: 20)),
-                          RaisedButton(
-                            color: Theme.of(context).primaryColorDark,
-                            textColor: Theme.of(context).primaryColorLight,
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => maps()),
-                              );
-                            },
-                            child: Text('View', style: TextStyle(fontSize: 20)),
-                          )
                         ]))
                     .toList()),
           ],
