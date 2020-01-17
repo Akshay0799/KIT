@@ -242,15 +242,19 @@ class _MyBodyState extends State<Body> {
             //   },
             // ),
             Text(
-              'Received Messages\n',
+              'Broadcasts\n',
               style: TextStyle(fontSize: 20),
             ),
             Column(
                 children: msg
                     .map((f) => Row(children: <Widget>[
-                          Text(f,
+                          Container(
+                            child: Text(
+                              f,
                               textAlign: TextAlign.left,
-                              style: TextStyle(fontSize: 20)),
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          )
                         ]))
                     .toList()),
           ],
