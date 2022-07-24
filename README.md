@@ -6,7 +6,7 @@ Emergencies and disasters impact population's health. Public health plays a crit
 ## Description<br>
 KIT is a Cross-platform Flutter Application that enables people stuck in areas where there's no cellular network/ data where they to communicate and broadcast SOS Messages to people in close proximity in the absence of Cellular data/networks <br>
 
-###Functionalities <br>
+### Functionalities <br>
 <ul>
 <li> Contact nearby-Health care facilities
 <li> Broadcast SOS Signals to nearby users
